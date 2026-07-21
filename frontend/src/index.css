@@ -8,6 +8,12 @@
   --color-primary-light: #eff6ff;
   --color-pending: #d97706;
   --color-pending-bg: #fffbeb;
+  --color-contacted: #059669;
+  --color-contacted-bg: #ecfdf5;
+  --color-no: #dc2626;
+  --color-no-bg: #fef2f2;
+  --color-unresponsive: #7c3aed;
+  --color-unresponsive-bg: #f5f3ff;
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
