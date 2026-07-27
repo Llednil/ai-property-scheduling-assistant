@@ -1,7 +1,11 @@
+import { useRef, useState } from "react";
 import PropTypes from "prop-types";
-import "../Pages/Dashboard.css";
+import "./TenantCard.css";
 
 function TenantCard({ tenant }) {
+  const [copied, setCopied] = useState(false);
+  const copyTimeoutRef = useRef<number | null>(null);
+
   let statusLabel;
   let statusClass = "";
 
@@ -26,13 +30,32 @@ function TenantCard({ tenant }) {
     statusLabel = tenant.contacted;
   }
 
+  async function handleCopyAddress() {
+    try {
+      await navigator.clipboard.writeText(tenant.address);
+
+      if (copyTimeoutRef.current) {
+        window.clearTimeout(copyTimeoutRef.current);
+      }
+
+      setCopied(true);
+      copyTimeoutRef.current = window.setTimeout(() => {
+        setCopied(false);
+        copyTimeoutRef.current = null;
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to copy address:", error);
+    }
+  }
+
   return (
     <>
       <div className="tenant-address-row">
         <h1 className="tenant-address">{tenant.address}</h1>
-        <button type="button" className="copy-btn">
+        <button type="button" className="copy-btn" onClick={handleCopyAddress}>
           Copy address
         </button>
+        {copied && <span className="copy-toast">Address Copied!</span>}
       </div>
       <div className="tenant-dates">
         <span className="date-badge"> {tenant.option1}</span>
