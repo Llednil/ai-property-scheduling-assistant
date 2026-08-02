@@ -1,32 +1,29 @@
 import express from "express";
+import cors from "cors";
 import tenantRoutes from "./routes/tenantRoutes";
-import { getWorksheetNames } from "./services/googleSheetsService";
+import templateRoutes from "./routes/templateRoutes";
 
 const app = express();
 const PORT = 3001;
 
-// Middleware (we'll learn more about this later)
+// Middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
+
 app.use(express.json());
 
-// Home route
+// Routes
 app.get("/", (req, res) => {
   res.send("AI Property Scheduling Assistant API is running!");
 });
 
-// Tenant routes
 app.use("/api/tenants", tenantRoutes);
+app.use("/api/templates", templateRoutes);
 
-app.get("/test-worksheet-names", async (req, res) => {
-    try {
-        const worksheetNames = await getWorksheetNames();
-        res.json(worksheetNames);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to get worksheet names" });
-    }   
-});
-
+// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
